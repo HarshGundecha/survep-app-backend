@@ -4,6 +4,7 @@ import com.happysolutions.surveyappbackend.entity.Answer;
 import com.happysolutions.surveyappbackend.entity.Question;
 import com.happysolutions.surveyappbackend.service.AnswerService;
 import com.happysolutions.surveyappbackend.service.QuestionService;
+import com.happysolutions.surveyappbackend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,12 +20,16 @@ public class AnswerController {
     private AnswerService answerService;
     @Autowired
     private QuestionService questionService;
+    @Autowired
+    private UserService userService;
 
     @PostMapping("/{questionId}")
     public boolean postAnswer(@Valid @RequestBody Answer answer, @PathVariable Long questionId) {
         Question question = questionService.getQuestion(questionId).get();
+
         if(question!=null)
         {
+            answer.setUser(userService.getUserFromRequest());
             question.getAnswerSet().add(answer);
             questionService.postQuestion(question);
             return true;

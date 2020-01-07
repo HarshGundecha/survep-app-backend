@@ -39,20 +39,23 @@ public class SurveyController {
     @GetMapping("/result/{surveyId}")
     public ResponseEntity<?> getResult(@PathVariable Long surveyId){
         Survey survey = surveyService.getSurvey(surveyId).get();
-        Set<Question> questions = survey.getQuestionSet();
         SurveyResult surveyResult = new SurveyResult();
-        HashSet<QuestionResult> questionResults = new HashSet<>();
-        for(Question question : questions){
-            Long trueCount = question.getAnswerSet().stream().filter(answer -> answer.getAnswerValue()).count();
-            Long falseCount = question.getAnswerSet().stream().filter(answer -> !answer.getAnswerValue()).count();
-            QuestionResult questionResult = new QuestionResult();
-            questionResult.setQuestionId(question.getQuestionId());
-            questionResult.setQuestionText(question.getQuestionText());
-            questionResult.setTrueCount(trueCount);
-            questionResult.setFalseCount(falseCount);
-            questionResults.add(questionResult);
+        if(survey!=null){
+            surveyResult.setSurveyId(survey.getSurveyId());
+            Set<Question> questions = survey.getQuestionSet();
+            HashSet<QuestionResult> questionResults = new HashSet<>();
+            for(Question question : questions){
+                Long trueCount = question.getAnswerSet().stream().filter(answer -> answer.getAnswerValue()).count();
+                Long falseCount = question.getAnswerSet().stream().filter(answer -> !answer.getAnswerValue()).count();
+                QuestionResult questionResult = new QuestionResult();
+                questionResult.setQuestionId(question.getQuestionId());
+                questionResult.setQuestionText(question.getQuestionText());
+                questionResult.setTrueCount(trueCount);
+                questionResult.setFalseCount(falseCount);
+                questionResults.add(questionResult);
+            }
+            surveyResult.setQuestionResultSet(questionResults);
         }
-        surveyResult.setQuestionResultSet(questionResults);
         return ResponseEntity.ok(surveyResult);
     }
 
