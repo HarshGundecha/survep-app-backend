@@ -1,5 +1,7 @@
 package com.happysolutions.surveyappbackend.entity;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,14 +19,17 @@ import java.util.Set;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
+@ApiModel(value = "Question")
 public class Question {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long questionId;
     @NotNull
     @NotBlank
+    @ApiModelProperty(notes = "The question for survey")
     private String questionText;
     @OneToMany(cascade = CascadeType.ALL)
+    @ApiModelProperty(notes = "The answers given by users")
     private Set<Answer> answerSet = new HashSet<>();
     @CreationTimestamp
     private Date createdAt;

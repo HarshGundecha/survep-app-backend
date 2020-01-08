@@ -5,6 +5,7 @@ import com.happysolutions.surveyappbackend.entity.User;
 import com.happysolutions.surveyappbackend.model.JwtResponse;
 import com.happysolutions.surveyappbackend.service.JwtUserDetailsService;
 import com.happysolutions.surveyappbackend.service.UserService;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -32,6 +33,11 @@ public class UserController {
     private JwtUserDetailsService userDetailsService;
 
     @PostMapping("/register")
+    @ApiOperation(
+            value = "Register a new user",
+            notes = "provided a valid user object it to onboards a user",
+            response = User.class
+    )
     public ResponseEntity<?> saveUser(@Valid @RequestBody User user) throws Exception {
 //        return ResponseEntity.ok(userService.save(user));
         userService.save(user);
